@@ -1,4 +1,4 @@
-# 📊 TA-05: Decision Tree Machine Learning Project
+#  TA-05: Decision Tree Machine Learning Project
 ## Telco Customer Churn Prediction & Retention Analytics
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python&logoColor=white)
@@ -8,7 +8,7 @@
 
 ---
 
-## 📌 Identitas Proyek
+##  Identitas Proyek
 
 * **Mata Kuliah:** Pembelajaran Mesin (Machine Learning)
 * **Modul / Tugas:** TA-05 (Decision Tree Classification)
@@ -19,7 +19,7 @@
 
 ---
 
-## 🎯 Deskripsi Proyek
+##  Deskripsi Proyek
 
 Proyek **TA-05** ini bertujuan untuk membangun sistem Machine Learning end-to-end yang mampu mengklasifikasikan risiko *churn* (berhenti berlangganan) pada pelanggan perusahaan telekomunikasi berbasis algoritma **Decision Tree Classifier**. 
 
@@ -27,7 +27,7 @@ Proyek ini tidak hanya berfokus pada akurasi prediksi, tetapi juga pada **interp
 
 ---
 
-## 📂 Struktur Repositori
+##  Struktur Repositori
 
 ```text
 TA05-DecisionTree-Churn/
@@ -48,7 +48,7 @@ TA05-DecisionTree-Churn/
 
 ---
 
-## 🔬 Hasil Eksperimen & Analisis Pemodelan
+##  Hasil Eksperimen & Analisis Pemodelan
 
 Dalam tugas akhir ini, dua variasi model Decision Tree dibangun dan dibandingkan:
 
@@ -66,7 +66,7 @@ Dalam tugas akhir ini, dua variasi model Decision Tree dibangun dan dibandingkan
 
 ---
 
-## 🚀 Fitur Aplikasi Web Interaktif
+##  Fitur Aplikasi Web Interaktif
 
 * **UI Dashboard Modern:** Responsive 2-column layout dengan indikator visual *glassmorphism*.
 * **Real-time Prediction:** Mengklasifikasikan status *Churn* secara langsung berdasarkan input form.
@@ -74,7 +74,7 @@ Dalam tugas akhir ini, dua variasi model Decision Tree dibangun dan dibandingkan
 
 ---
 
-## 🛠️ Panduan Menjalankan Proyek di Lokal
+##  Panduan Menjalankan Proyek di Lokal
 
 ### 1. Clone Repositori
 ```bash
@@ -95,7 +95,7 @@ Akses di browser kamu pada alamat: `http://127.0.0.1:5000`
 
 ---
 
-## 🔗 Tautan Penting
+##  Tautan Penting
 
 * **Aplikasi Live Deployment (Vercel):** [https://ta05-decision-tree-churn.vercel.app](https://ta05-decision-tree-churn.vercel.app) *(Sesuaikan dengan URL Vercel kamu)*
 * **Video Demonstrasi & Presentasi YouTube:** [Link Video YouTube Presentasi 5-7 Menit]
@@ -103,5 +103,5 @@ Akses di browser kamu pada alamat: `http://127.0.0.1:5000`
 
 ---
 
-## 📄 Lisensi & Hak Cipta
+##  Lisensi & Hak Cipta
 Hak cipta proyek dikembangkan untuk memenuhi kriteria evaluasi praktikum **TA-05 Pembelajaran Mesin**, Teknik Informatika, 2026.
