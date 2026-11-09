@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Churn Predictor | Machine Learning TA-05</title>
+    <!-- Bootstrap 5 CSS & FontAwesome Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        .main-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            background: #ffffff;
+        }
+        .form-label {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+        .form-control, .form-select {
+            border-radius: 10px;
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+            font-size: 0.95rem;
+        }
+        .btn-predict {
+            background-color: #2563eb;
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            font-weight: 600;
+        }
+        .btn-predict:hover {
+            background-color: #1d4ed8;
+        }
+        .result-box {
+            border-radius: 14px;
+            padding: 24px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            width: fit-content;
+        }
+        .progress {
+            height: 10px;
+            border-radius: 10px;
+            background-color: #e2e8f0;
+        }
+        .tech-badge {
+            background-color: #f1f5f9;
+            color: #475569;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom py-3 mb-4">
+        <div class="container">
+            <a class="navbar-brand text-primary fw-bold d-flex align-items-center gap-2" href="#">
+                <i class="fa-solid fa-chart-line fs-4"></i>
+                <span>TelcoAnalytics</span>
+            </a>
+            <div class="d-flex align-items-center gap-2">
+                <span class="tech-badge"><i class="fa-solid fa-microchip me-1"></i> Decision Tree</span>
+                <span class="tech-badge"><i class="fa-solid fa-graduation-cap me-1"></i> TA-05 ML</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="main-card p-4 p-md-5">
+                    
+                    <div class="mb-4">
+                        <h3 class="fw-bold mb-1">Prediksi Retensi Pelanggan</h3>
+                        <p class="text-muted mb-0">Masukkan parameter penggunaan dan kontrak pelanggan untuk mengklasifikasikan risiko <i>churn</i> secara real-time.</p>
+                    </div>
+
+                    <form action="/" method="POST">
+                        <div class="row g-4">
+                            
+                            <!-- Form Inputs (Kolom Kiri) -->
+                            <div class="col-md-7 border-end-md pe-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        <i class="fa-regular fa-clock text-primary me-1"></i> Lama Berlangganan / Tenure (Bulan)
+                                    </label>
+                                    <input type="number" name="tenure" class="form-control" placeholder="Contoh: 12" value="{{ request.form.get('tenure', '') }}" required>
+                                </div>
+
+                                <div class="row g-3 mb-3">
+                                    <div class="col-6">
+                                        <label class="form-label">
+                                            <i class="fa-solid fa-dollar-sign text-primary me-1"></i> Biaya Bulanan ($)
+                                        </label>
+                                        <input type="number" step="0.01" name="MonthlyCharges" class="form-control" placeholder="70.35" value="{{ request.form.get('MonthlyCharges', '') }}" required>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">
+                                            <i class="fa-solid fa-receipt text-primary me-1"></i> Total Biaya ($)
+                                        </label>
+                                        <input type="number" step="0.01" name="TotalCharges" class="form-control" placeholder="850.50" value="{{ request.form.get('TotalCharges', '') }}" required>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        <i class="fa-regular fa-file-lines text-primary me-1"></i> Tipe Kontrak
+                                    </label>
+                                    <select name="Contract" class="form-select">
+                                        <option value="Month-to-month" {% if request.form.get('Contract') == 'Month-to-month' %}selected{% endif %}>Month-to-month (Bulanan)</option>
+                                        <option value="One year" {% if request.form.get('Contract') == 'One year' %}selected{% endif %}>One year (1 Tahun)</option>
+                                        <option value="Two year" {% if request.form.get('Contract') == 'Two year' %}selected{% endif %}>Two year (2 Tahun)</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label">
+                                        <i class="fa-solid fa-wifi text-primary me-1"></i> Layanan Internet
+                                    </label>
+                                    <select name="InternetService" class="form-select">
+                                        <option value="Fiber optic" {% if request.form.get('InternetService') == 'Fiber optic' %}selected{% endif %}>Fiber Optic</option>
+                                        <option value="DSL" {% if request.form.get('InternetService') == 'DSL' %}selected{% endif %}>DSL</option>
+                                        <option value="No" {% if request.form.get('InternetService') == 'No' %}selected{% endif %}>Tidak Ada Layanan</option>
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-predict w-100 shadow-sm text-white">
+                                    <i class="fa-solid fa-wand-magic-sparkles me-2"></i> Analisis & Prediksi
+                                </button>
+                            </div>
+
+                            <!-- Result Panel (Kolom Kanan) -->
+                            <div class="col-md-5 ps-md-4 d-flex flex-column justify-content-center">
+                                {% if prediction_text %}
+                                    {% set prob_val = prob_text.split(': ')[1] %}
+                                    {% if 'CHURN' in prediction_text %}
+                                    <div class="result-box bg-danger-subtle border border-danger-subtle text-danger">
+                                        <div class="status-badge bg-danger text-white mb-3">
+                                            <i class="fa-solid fa-triangle-exclamation"></i> Risiko Tinggi
+                                        </div>
+                                        <h5 class="fw-bold mb-2">Potensi Churn!</h5>
+                                        <p class="small text-danger-emphasis mb-3">Pelanggan terindikasi memiliki kecenderungan tinggi untuk berhenti berlangganan.</p>
+                                        
+                                        <div class="mt-auto">
+                                            <div class="d-flex justify-content-between small fw-bold mb-1">
+                                                <span>Probabilitas Churn</span>
+                                                <span>{{ prob_val }}</span>
+                                            </div>
+                                            <div class="progress">
+                                                <div class="progress-bar bg-danger" role="progressbar" style="width: 100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                    <div class="result-box bg-success-subtle border border-success-subtle text-success">
+                                        <div class="status-badge bg-success text-white mb-3">
+                                            <i class="fa-solid fa-circle-check"></i> Pelanggan Setia
+                                        </div>
+                                        <h5 class="fw-bold mb-2">Pelanggan Bertahan</h5>
+                                        <p class="small text-success-emphasis mb-3">Pelanggan diperkirakan akan terus melanjutkan layanan berlangganan.</p>
+                                        
+                                        <div class="mt-auto">
+                                            <div class="d-flex justify-content-between small fw-bold mb-1">
+                                                <span>Probabilitas Churn</span>
+                                                <span>{{ prob_val }}</span>
+                                            </div>
+                                            <div class="progress">
+                                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="result-box bg-light border text-center text-muted">
+                                        <i class="fa-solid fa-chart-pie display-5 mb-3 text-secondary"></i>
+                                        <h6 class="fw-bold">Belum Ada Hasil</h6>
+                                        <p class="small mb-0">Isi formulir di sebelah kiri dan klik tombol untuk melihat hasil klasifikasi Decision Tree.</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

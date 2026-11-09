@@ -1,0 +1,13 @@
+# Python virtual environment & cache
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+
+# VS Code settings
+.vscode/
+
+# Dataset lokal (biar repo tidak keberatan)
+WA_Fn-UseC_-Telco-Customer-Churn.csv
